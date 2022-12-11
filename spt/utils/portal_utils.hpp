@@ -1,6 +1,6 @@
 #pragma once
 
-#if !defined(OE) && !defined(BMS)
+#if !defined(OE) && !defined(BMS) && !defined(L4D)
 
 #define SPT_PORTAL_UTILS
 
