@@ -554,7 +554,6 @@ namespace utils
 		{
 			return false;
 		}
-	}
 #endif
 	}
 
