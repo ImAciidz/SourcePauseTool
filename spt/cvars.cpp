@@ -105,6 +105,35 @@ extern "C" ICvar* GetCVarIF()
 	}
 }
 
+#elif defined(L4D)
+void Cvar_RegisterSPTCvars()
+{
+	if (!g_pCVar)
+		return;
+	ConVar_Register(0);
+	int identifier = y_spt_pause.GetDLLIdentifier();
+
+	ICvar::Iterator iter(g_pCVar);
+
+	for (iter.SetFirst(); iter.IsValid();)
+	{
+		auto cmd = iter.Get();
+		ConCommandBase* todelete = nullptr;
+		if (cmd->GetDLLIdentifier() == identifier)
+		{
+			if (cmd_to_feature.find(cmd) == cmd_to_feature.end())
+			{
+				DevWarning("Command %s was unloaded, because it was not initialized!\n",
+				           cmd->GetName());
+				todelete = cmd;
+			}
+		}
+		iter.Next();
+		if (todelete)
+			g_pCVar->UnregisterConCommand(todelete);
+	}
+}
+
 #else
 static bool first_time_init = true;
 

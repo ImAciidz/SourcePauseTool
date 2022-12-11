@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#if !defined(OE)
+#if !defined(OE) && !defined(L4D)
 
 #include "generic.hpp"
 #include "..\feature.hpp"

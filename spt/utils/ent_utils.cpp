@@ -26,7 +26,7 @@
 
 #undef max
 
-#if !defined(OE)
+#if !defined(OE) && !defined(L4D)
 #define GAME_DLL
 #include "cbase.h"
 #endif
@@ -419,6 +419,7 @@ namespace utils
 	}
 	int GetIndex(void* ent)
 	{
+#if !defined(L4D)
 		if (!ent)
 			return -1;
 
@@ -428,7 +429,7 @@ namespace utils
 			if (e && e->GetUnknown() == ent)
 				return i;
 		}
-
+#endif
 		return -1;
 	}
 
@@ -444,6 +445,7 @@ namespace utils
 		}
 	}
 
+#if !defined(L4D)
 	IServerUnknown* GetServerPlayer()
 	{
 		if (!interfaces::engine_server)
@@ -455,6 +457,14 @@ namespace utils
 
 		return edict->GetUnknown();
 	}
+#else
+	// TODO
+	IServerUnknown* GetServerPlayer()
+	{
+		assert(false);
+		return nullptr;
+	}
+#endif
 
 	JBData CanJB(float height)
 	{
@@ -509,6 +519,7 @@ namespace utils
 		return GetClientEntity(0) != nullptr;
 	}
 
+#if !defined(L4D)
 	static CBaseEntity* GetServerEntity(int index)
 	{
 		if (!interfaces::engine_server)
@@ -524,9 +535,13 @@ namespace utils
 
 		return unknown->GetBaseEntity();
 	}
+#endif
 
 	bool GetPunchAngleInformation(QAngle& punchAngle, QAngle& punchAngleVel)
 	{
+#if defined(L4D)
+		return false;
+#else
 		auto ply = GetServerEntity(1);
 
 		if (ply)
@@ -540,8 +555,10 @@ namespace utils
 			return false;
 		}
 	}
+#endif
+	}
 
-#if !defined(OE)
+#if !defined(OE) && !defined(L4D)
 	static int GetServerEntityCount()
 	{
 		if (!interfaces::engine_server)
